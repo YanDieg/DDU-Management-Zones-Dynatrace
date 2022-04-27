@@ -1,4 +1,4 @@
-BASE_URL = 'https://kcy25048.live.dynatrace.com/api/'
+BASE_URL = 'https://yourenviroment.live.dynatrace.com/api/'
 API_TOKEN = 'PUTYOURTOKEN'
 MAX_REQUESTS_PER_MINUTE = 1000
 
