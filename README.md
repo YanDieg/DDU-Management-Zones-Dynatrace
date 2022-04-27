@@ -1,4 +1,4 @@
-# DDU-Management-Zones-Dynatrace
+# DDU consumptions for Management Zones script calculator for Dynatrace
 Dynatrace Script - This script let you to calculate DDU consumptions (for now of logs, metrics and events) divided by Management Zones in Dynatrace
 
 # HOW TO RUN
