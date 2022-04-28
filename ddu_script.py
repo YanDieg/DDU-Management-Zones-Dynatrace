@@ -10,6 +10,8 @@ sys.tracebacklimit = 0
 if len(periods) == 0:
     print("ALMOST 1 PERIOD PLS")
     exit()
+    
+print(API_TOKEN)
 
 allManagemementZones = None
 # GET ALL MZs
@@ -23,10 +25,10 @@ try:
     allManagemementZones = json.loads(response.content)["values"]
 except requests.exceptions.RequestException as e:
     print(e)
-    exit
+    exit()
 except:
     print("GENERIC ERROR")
-    exit
+    exit()
 
 allEntityTypes = None
 # GET ALL ENTITIES
@@ -39,10 +41,10 @@ try:
     allEntityTypes = json.loads(response.content)["types"]
 except requests.exceptions.RequestException as e:
     print(e)
-    exit
+    exit()
 except:
     print("GENERIC ERROR")
-    exit
+    exit()
 
 
 #check if there are entities in other pages
@@ -111,7 +113,8 @@ for key, value in ddu_metrics.items():
 
             time.sleep(60 / MAX_REQUESTS_PER_MINUTE)
             dduConsumptionOfMZandETDict = json.loads(response.content)["result"][0]["data"]
-
+                
+            
             dduConsumptionOfMZandET = 0
             if dduConsumptionOfMZandETDict:
                 # Filter out every empty usage values and create the sum of ddu usage
@@ -129,13 +132,16 @@ for key, value in ddu_metrics.items():
     print(entities[key])
     print()
     
+
 if not only_one_period:
     print("SECOND PHASE - FIND WHICH MZ")
 else:
     print("SECOND and THIRD PHASE - FIND DDU CONS. for MZs")
     
 for key, value in ddu_metrics.items(): 
-
+    
+    temp_list_MZ = []
+    
     if value['enable'] == True:
         if only_one_period:
             print("Find MZ DDU Consumption for:", key)
@@ -209,16 +215,19 @@ for key, value in ddu_metrics.items():
         if dduConsumptionOfManagementZone > 0:
             MZs[key].append(managementZone_name)
             if only_one_period:
-                print(managementZone_name, "-", int(round(dduConsumptionOfManagementZone, 0)), "-", FROM, "-", TO)
+                temp_list_MZ.append(" ".join([managementZone_name, "|", str(round(dduConsumptionOfManagementZone, 2)), "|", FROM, "|", TO]))
     
     if not only_one_period:
         print(MZs[key])
+    else:
+        print("\n".join(temp_list_MZ))
+    
     print()
 
 if not only_one_period:
     print("THIRD PHASE - FIND DDU CONS. FOR MZ")
 else:
-    exit #already done
+    exit() #already done
 
 
 for key, value in ddu_metrics.items(): 
@@ -284,7 +293,7 @@ for key, value in ddu_metrics.items():
                 continue
             
             
-            print(managementZone, "-", int(round(dduConsumptionOfManagementZone, 0)), "-", FROM, "-", TO)
+            print(managementZone, "|", str(round(dduConsumptionOfManagementZone, 2)), "|", FROM, "|", TO)
              
     print()
 
