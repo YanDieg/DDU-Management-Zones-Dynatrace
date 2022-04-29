@@ -9,4 +9,4 @@ Dynatrace Script - This script let you to calculate DDU consumptions (for now of
 * You can also disable some metrics putting _False_ instead _True_ alsway in the configuration file (not recommended)
 
 
-**In case of problem contact me on yanez.parolin@dynatrace.com**
+**In case of problem contact me on yanezdiegoparolin@gmail.com**
