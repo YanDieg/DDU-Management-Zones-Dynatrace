@@ -1,6 +1,7 @@
 import sys, requests, json, time
 import urllib.parse
 from tqdm import tqdm
+from datetime import date
 
 from configuration import *
 
@@ -170,6 +171,20 @@ for key, value in ddu_metrics.items():
         FROM = periods[0][0] #str(sys.argv[1])
         TO = periods[-1][1]#str(sys.argv[2])
         
+        d0 = date(int(FROM[:4]), int(FROM[5:7]), int(FROM[8:10]))
+        d1 = date(int(TO[:4]), int(TO[5:7]), int(TO[8:10]))
+        delta = d1 - d0
+        delta = int(delta.days)
+        
+        if delta <= 7:
+            resolution = '1h'
+        elif delta <= 31:
+            resolution = '1d'
+        elif delta <= 365:
+            resolution = '1w'
+        else:
+            resolution = '1M'
+        
         FILTER_ENTITY = []
         for entityType in entities[key]:
             if entityType in not_good_entity:
@@ -180,10 +195,11 @@ for key, value in ddu_metrics.items():
         
         FILTER_ENTITY = ','.join(FILTER_ENTITY)
         
-        base = '{}v2/metrics/query?metricSelector={}:splitBy("dt.entity.monitored_entity"):filter(or({})):splitBy():fold(sum)&resolution=1h&from={}&to={}'.format(
+        base = '{}v2/metrics/query?metricSelector={}:splitBy("dt.entity.monitored_entity"):filter(or({})):splitBy():fold(sum)&resolution={}&from={}&to={}'.format(
             BASE_URL,
             METRIC_NAME,
             FILTER_ENTITY,
+            resolution,
             FROM,
             TO
         )
@@ -249,6 +265,21 @@ for key, value in ddu_metrics.items():
             dduConsumptionOfManagementZone = 0
             FROM = period[0]
             TO = period[1]
+           
+            
+            d0 = date(int(FROM[:4]), int(FROM[5:7]), int(FROM[8:10]))
+            d1 = date(int(TO[:4]), int(TO[5:7]), int(TO[8:10]))
+            delta = d1 - d0
+            delta = int(delta.days)
+            
+            if delta <= 7:
+                resolution = '1h'
+            elif delta <= 31:
+                resolution = '1d'
+            elif delta <= 365:
+                resolution = '1w'
+            else:
+                resolution = '1M'
             
             
             FILTER_ENTITY = []
@@ -261,10 +292,11 @@ for key, value in ddu_metrics.items():
             
             FILTER_ENTITY = ','.join(FILTER_ENTITY)
             
-            base = '{}v2/metrics/query?metricSelector={}:splitBy("dt.entity.monitored_entity"):filter(or({})):splitBy():fold(sum)&resolution=1h&from={}&to={}'.format(
+            base = '{}v2/metrics/query?metricSelector={}:splitBy("dt.entity.monitored_entity"):filter(or({})):splitBy():fold(sum)&resolution={}&from={}&to={}'.format(
                     BASE_URL,
                     METRIC_NAME,
                     FILTER_ENTITY,
+                    resolution,
                     FROM,
                     TO
                 )
